@@ -70,7 +70,7 @@ class click_abbrevs:
     pass
 
 
-def add_dump_help_to_file_command(cmd):
+def add_dump_help_to_file_command(cmd, name_of_dump_help_command: str = "dh"):
     """Add the dump_help_to_file command to the command."""
 
     @click.command()
@@ -129,7 +129,7 @@ def add_dump_help_to_file_command(cmd):
 
         # re.sub(pattern, "", res_text)
 
-    cmd.add_command(dumphelp_to_file, name="dh2")
+    cmd.add_command(dumphelp_to_file, name=name_of_dump_help_command)
     # return cmd
 
 
