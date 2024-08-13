@@ -183,6 +183,10 @@ def recursive_help(
     return lines
 
 
+def main():
+    print("Nothing to see here up to now.")
+
+
 if __name__ == "__main__":
     # dumphealp_to_file()
     pass
