@@ -64,61 +64,73 @@ class HelpConfig:
     parent: str | None = None
 
 
-# @click.command()
-# @click_abbrevs.copy_to_clipboard_option
-# @click_abbrevs.help_shorter_option
-# @click_abbrevs.print_result_option
-# @click.option(
-#     "--number_sections/--no_number_sections",
-#     "--ns/--nons",
-#     is_flag=True,
-#     default=False,
-#     show_default=True,
-#     help="Print result to console.",
-# )
-# def dumphelp_to_file(
-#     print_result: bool = True,
-#     number_sections: bool = False,
-# ):
-#     """Dump the help to ../docs/dump_help.md."""
-#     target_file = constants.PROJECT_ROOT / "doc" / "dump_help.md"
+class click_abbrevs:
+    help_shorter_option = help_shorter_option
+    print_result_option = print_result_option
+    pass
 
-#     help_config = HelpConfig(
-#         dotted_name="",
-#         dotted_section="1",
-#         is_root=True,
-#         level=1,
-#         number_sections=number_sections,
-#         parent=None,
-#     )
 
-#     lines = recursive_help(cmd=main.suca, help_config=help_config)
+def add_dump_help_to_file_command(cmd):
+    """Add the dump_help_to_file command to the command."""
 
-#     # Remove the lines matching the pattern "Usage:" other stuff [OPTIONS] other stuff
-#     pattern = r".*Usage.*\n*"
-#     # remove all lines matching the pattern
+    @click.command()
+    @click_abbrevs.help_shorter_option
+    @click_abbrevs.print_result_option
+    @click.option(
+        "--number_sections/--no_number_sections",
+        "--ns/--nons",
+        is_flag=True,
+        default=False,
+        show_default=True,
+        help="Print result to console.",
+    )
+    def dumphelp_to_file(
+        print_result: bool = True,
+        number_sections: bool = False,
+    ):
+        """Dump the help to ../docs/dump_help.md."""
+        # target_file = constants.PROJECT_ROOT / "doc" / "dump_help.md"
+        target_file = "dump_help.md"
 
-#     modified_lines = []
-#     for line in lines:
-#         line = re.sub(pattern, "", line)
-#         modified_lines.append(line)
+        help_config = HelpConfig(
+            dotted_name="",
+            dotted_section="1",
+            is_root=True,
+            level=1,
+            number_sections=number_sections,
+            parent=None,
+        )
 
-#     lines = modified_lines
+        lines = recursive_help(cmd=cmd, help_config=help_config)
 
-#     res_text = "\n".join(lines)
+        # Remove the lines matching the pattern "Usage:" other stuff [OPTIONS] other stuff
+        pattern = r".*Usage.*\n*"
+        # remove all lines matching the pattern
 
-#     pattern_2 = r"```\n  "  # fix indent at the beginning of the code block
-#     res_text = re.sub(pattern_2, "```\n", res_text)
+        modified_lines = []
+        for line in lines:
+            line = re.sub(pattern, "", line)
+            modified_lines.append(line)
 
-#     if print_result:
-#         print(res_text)
-#         # print("hi")
+        lines = modified_lines
 
-#     with open(target_file, "w") as f:
-#         f.write(res_text)
-#         print("Dumped help to", target_file)
+        res_text = "\n".join(lines)
 
-#     # re.sub(pattern, "", res_text)
+        pattern_2 = r"```\n  "  # fix indent at the beginning of the code block
+        res_text = re.sub(pattern_2, "```\n", res_text)
+
+        if print_result:
+            print(res_text)
+            # print("hi")
+
+        with open(target_file, "w") as f:
+            f.write(res_text)
+            print("Dumped help to", target_file)
+
+        # re.sub(pattern, "", res_text)
+
+    cmd.add_command(dumphelp_to_file, name="dh2")
+    # return cmd
 
 
 def recursive_help(
