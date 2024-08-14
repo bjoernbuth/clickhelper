@@ -1,0 +1,20 @@
+[build-system]
+# requires = ["setuptools", "wheel"]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clickhelper"
+version = "2024.8.13.1b"
+authors = [{ name = "Bjoern" }]
+readme = "README.md"
+
+dependencies = ["click"]
+
+[project.scripts]
+clickhelper = "clickhelper.dumphelp_to_file.py:main"
+clihe = "clickhelper.dumphelp_to_file.py:main"
+
+
+[tool.black]
+line-length = 100
